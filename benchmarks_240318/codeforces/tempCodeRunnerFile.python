@@ -1,0 +1,43 @@
+import csv
+from collections import defaultdict
+import matplotlib.pyplot as plt
+
+# 属性列表
+attributes = [
+    "brute force", "data structures", "implementation", "dp", "greedy", "math",
+    "number theory", "two pointers", "hashing", "string suffix structures",
+    "strings", "dfs and similar", "graphs", "binary search", "sortings", "bitmasks",
+    "shortest paths", "combinatorics", "constructive algorithms", "interactive",
+    "trees", "dsu", "flows", "games", "2-sat", "geometry", "divide and conquer",
+    "fft", "probabilities", "graph matchings", "ternary search", "meet-in-the-middle",
+    "matrices", "special problem", "schedules", "chinese remainder theorem",
+    "expression parsing"
+]
+
+# 初始化一个字典来存储每个属性的频次
+attribute_counts = defaultdict(int)
+
+# 读取TSV文件
+with open("train+test+valid.tsv", "r", encoding="utf-8") as file:
+    reader = csv.reader(file, delimiter="\t")
+    
+    for row in reader:
+        # 从第二列开始遍历每个属性
+        for i, attribute_value in enumerate(row[1:], start=1):
+            if attribute_value == "1":  # 如果该样本具有该属性
+                attribute_counts[i-1] += 1  # 记录频次
+
+# 准备绘图数据
+labels = attributes
+counts = [attribute_counts[i] for i in range(len(attributes))]
+
+# 创建条形图
+plt.figure(figsize=(10, 8))
+plt.barh(labels, counts, color='skyblue')
+plt.xlabel('Frequency')
+plt.title('Frequency of Attributes')
+plt.tight_layout()
+
+# 旋转标签以便更好地展示
+plt.xticks(rotation=45)
+plt.show()
